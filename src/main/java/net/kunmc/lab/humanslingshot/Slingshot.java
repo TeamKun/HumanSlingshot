@@ -1,6 +1,5 @@
 package net.kunmc.lab.humanslingshot;
 
-import net.kunmc.lab.humanslingshot.util.EntityUtil;
 import net.kunmc.lab.humanslingshot.util.LocationUtil;
 import net.kunmc.lab.humanslingshot.util.ParticleUtil;
 import org.bukkit.Bukkit;
@@ -103,8 +102,7 @@ public class Slingshot implements Listener {
         direction.setY(passenger.getLocation().getDirection().getY());
         double distance = center.distance(seat.getLocation());
 
-        passenger.leaveVehicle();
-        Bukkit.getScheduler().runTaskLater(plugin, () -> EntityUtil.blowOff(passenger, direction.multiply(distance / maxDistance * 8), plugin), 1);
+        new Bullet(((Player) passenger), plugin).fire(direction.multiply(distance / maxDistance * 8));
 
         puller = null;
         teleportSeat(center);
