@@ -7,7 +7,6 @@ import org.bukkit.util.Vector;
 
 public class EntityUtil {
     public static void blowOff(Entity entity, Vector velocity, Plugin plugin) {
-        System.out.println(velocity.length());
         new BukkitRunnable() {
             private int count = 0;
             private final int numberOfTimes = ((int) (velocity.length() / 4)) + 1;
@@ -22,7 +21,6 @@ public class EntityUtil {
                 } else {
                     v.multiply(length);
                 }
-                System.out.println(v.length());
                 entity.setVelocity(v);
 
                 count++;
