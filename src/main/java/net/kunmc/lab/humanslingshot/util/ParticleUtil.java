@@ -9,7 +9,7 @@ public class ParticleUtil {
     public static void drawLine(Particle particle, Location from, Location to, double gap, int count, Object data) {
         World w = from.getWorld();
         Vector subtract = to.clone().subtract(from).toVector();
-        Vector inc = VectorUtil.toUnit(subtract).multiply(gap);
+        Vector inc = subtract.clone().normalize().multiply(gap);
 
         Location start = from.clone();
         for (int i = 0; i < subtract.length() / inc.length(); i++) {
