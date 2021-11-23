@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Slingshot implements Listener {
-    private static final double maxDistance = 12.0;
+    private final Config config;
     private final Plugin plugin;
     private final ArmorStand seat;
     private final Pole pole1;
@@ -51,16 +51,17 @@ public class Slingshot implements Listener {
         return loc1.distance(loc2) <= 6;
     }
 
-    public static Slingshot of(Pole pole1, Pole pole2, Plugin plugin) {
+    public static Slingshot of(Pole pole1, Pole pole2, Config config, Plugin plugin) {
         if (!isValidPosition(pole1, pole2)) {
             return null;
         }
 
-        return new Slingshot(pole1, pole2, plugin);
+        return new Slingshot(pole1, pole2, config, plugin);
     }
 
-    private Slingshot(Pole pole1, Pole pole2, Plugin plugin) {
+    private Slingshot(Pole pole1, Pole pole2, Config config, Plugin plugin) {
         this.plugin = plugin;
+        this.config = config;
         this.pole1 = pole1;
         this.pole2 = pole2;
         this.seat = ((ArmorStand) pole1.world().spawnEntity(LocationUtil.midway(pole1.top(), pole2.top()), EntityType.ARMOR_STAND, CreatureSpawnEvent.SpawnReason.CUSTOM, e -> {
@@ -102,7 +103,7 @@ public class Slingshot implements Listener {
         direction.setY(passenger.getLocation().getDirection().getY());
         double distance = center.distance(seat.getLocation());
 
-        new Bullet(((Player) passenger), plugin).fire(direction.multiply(distance / maxDistance * 8));
+        new Bullet(((Player) passenger), config, plugin).fire(direction.multiply(distance / config.maxPullDistance.value() * 8));
 
         puller = null;
         teleportSeat(center);
@@ -188,7 +189,7 @@ public class Slingshot implements Listener {
                 fix();
             }
 
-            if (center.distance(puller.getLocation()) > maxDistance) {
+            if (center.distance(puller.getLocation()) > config.maxPullDistance.value()) {
                 fix();
             }
         }
@@ -226,7 +227,7 @@ public class Slingshot implements Listener {
                 pullState = PullState.WEAK;
             } else if (distance <= 9.0) {
                 pullState = PullState.MODERATE;
-            } else if (distance <= maxDistance) {
+            } else if (distance <= config.maxPullDistance.value()) {
                 pullState = PullState.STRONG;
             } else {
                 pullState = PullState.MAX;

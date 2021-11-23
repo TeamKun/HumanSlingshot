@@ -13,11 +13,13 @@ import org.bukkit.util.Vector;
 
 public class Bullet {
     private final Player player;
+    private final Config config;
     private final Plugin plugin;
     private double power;
 
-    public Bullet(Player player, Plugin plugin) {
+    public Bullet(Player player, Config config, Plugin plugin) {
         this.player = player;
+        this.config = config;
         this.plugin = plugin;
     }
 
@@ -28,7 +30,6 @@ public class Bullet {
         Bukkit.getScheduler().runTaskLater(plugin, () -> EntityUtil.blowOff(player, velocity, plugin), 1);
 
         long delay = 0;
-        System.out.println(velocity);
         if (velocity.getY() < -0.2) {
             delay = 20;
         }
@@ -37,7 +38,7 @@ public class Bullet {
 
     private void explode() {
         Bukkit.getScheduler().runTask(plugin, () -> {
-            player.getLocation().createExplosion(((float) power), false, false);
+            player.getLocation().createExplosion(((float) power) * config.explosionMagnification.value(), false, false);
             player.setHealth(0.0);
         });
     }
