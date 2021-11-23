@@ -128,6 +128,10 @@ public class Pole implements Listener {
         return top;
     }
 
+    public Location particleLocation() {
+        return top().getBoundingBox().getCenter().toLocation(world()).add(0, 0.25, 0);
+    }
+
     public Location topLocation() {
         return top.getLocation();
     }
