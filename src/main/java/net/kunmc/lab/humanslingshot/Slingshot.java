@@ -103,7 +103,7 @@ public class Slingshot implements Listener {
         direction.setY(passenger.getLocation().getDirection().getY());
         double distance = center.distance(seat.getLocation());
 
-        new Bullet(((Player) passenger), config, plugin).fire(direction.multiply(distance / config.maxPullDistance.value() * 8));
+        new Bullet(((Player) passenger), config, plugin).fire(direction.multiply(distance / 12.0 * 8 * config.launchPowerMagnification.value()));
 
         puller = null;
         teleportSeat(center);
