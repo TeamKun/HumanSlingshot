@@ -18,6 +18,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.plugin.Plugin;
@@ -160,6 +161,14 @@ public class Slingshot implements Listener {
     @EventHandler
     public void onPluginDisable(PluginDisableEvent e) {
         unassign();
+    }
+
+    @EventHandler
+    private void onPassengerExit(PlayerQuitEvent e) {
+        Entity passenger = seat.getPassengers().get(0);
+        if (e.getPlayer().equals(passenger)) {
+            passenger.leaveVehicle();
+        }
     }
 
     private class ParticleTask extends BukkitRunnable {
