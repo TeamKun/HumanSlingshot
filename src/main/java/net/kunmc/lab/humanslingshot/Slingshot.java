@@ -164,7 +164,7 @@ public class Slingshot implements Listener {
     }
 
     @EventHandler
-    private void onPassengerExit(PlayerQuitEvent e) {
+    private void onPassengerQuit(PlayerQuitEvent e) {
         Entity passenger = seat.getPassengers().get(0);
         if (e.getPlayer().equals(passenger)) {
             passenger.leaveVehicle();
@@ -219,6 +219,13 @@ public class Slingshot implements Listener {
     private class PullingTask extends BukkitRunnable {
         @Override
         public void run() {
+            if (seat.getPassengers().isEmpty()) {
+                pullState = PullState.WEAK;
+                puller = null;
+                teleportSeat(center);
+                return;
+            }
+
             if (puller == null) {
                 pullState = PullState.WEAK;
                 return;
