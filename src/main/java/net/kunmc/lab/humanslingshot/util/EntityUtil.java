@@ -21,13 +21,13 @@ public class EntityUtil {
                 } else {
                     v.multiply(length);
                 }
-                entity.setVelocity(v);
 
+                entity.setVelocity(v);
                 count++;
                 if (count >= numberOfTimes) {
                     this.cancel();
                 }
             }
-        }.runTaskTimer(plugin, 0, 12);
+        }.runTaskTimer(plugin, 0, 10);
     }
 }
