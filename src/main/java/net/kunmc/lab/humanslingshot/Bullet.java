@@ -13,6 +13,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
@@ -52,10 +53,22 @@ public class Bullet implements Listener {
         Bukkit.getScheduler().runTask(plugin, () -> {
             player.getLocation().createExplosion(((float) power) * config.explosionMagnification.value(), false, false);
             player.setHealth(0.0);
-            arrow.remove();
         });
 
+        remove();
+    }
+
+    private void remove() {
+        arrow.remove();
         HandlerList.unregisterAll(this);
+    }
+
+    @EventHandler
+    private void onPassengerQuit(PlayerQuitEvent e) {
+        Player p = e.getPlayer();
+        if (p.equals(player)) {
+            remove();
+        }
     }
 
     @EventHandler
@@ -69,6 +82,11 @@ public class Bullet implements Listener {
     private class DecideExplodeTask extends BukkitRunnable {
         @Override
         public void run() {
+            if (arrow.isDead()) {
+                this.cancel();
+                return;
+            }
+
             if (arrow.isOnGround()) {
                 explode();
                 this.cancel();
