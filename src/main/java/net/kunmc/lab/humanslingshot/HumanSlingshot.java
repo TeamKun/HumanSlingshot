@@ -9,7 +9,8 @@ import dev.kotx.flylib.FlyLib;
 import dev.kotx.flylib.command.Command;
 import net.kunmc.lab.configlib.command.ConfigCommand;
 import net.kunmc.lab.configlib.command.ConfigCommandBuilder;
-import net.minecraft.server.v1_16_R3.DedicatedServerProperties;
+import net.minecraft.server.v1_16_R3.DedicatedServer;
+import net.minecraft.server.v1_16_R3.MinecraftServer;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.type.Wall;
@@ -84,11 +85,11 @@ public final class HumanSlingshot extends JavaPlugin implements Listener {
             }
         }.runTaskTimer(this, 0, 4);
 
-        DedicatedServerProperties properties = ((CraftServer) Bukkit.getServer()).getHandle().getServer().getDedicatedServerProperties();
+        DedicatedServer server = ((CraftServer) Bukkit.getServer()).getHandle().getServer();
         try {
-            Field field = properties.getClass().getDeclaredField("allowFlight");
+            Field field = MinecraftServer.class.getDeclaredField("allowFlight");
             field.setAccessible(true);
-            field.set(properties, true);
+            field.set(server, true);
         } catch (Exception e) {
             e.printStackTrace();
         }
